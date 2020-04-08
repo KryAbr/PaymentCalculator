@@ -1,26 +1,23 @@
+package Models;
+
+import service.ProductService;
+
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
 
     public static void main(String[] args) {
 
+        ProductService productService = new ProductService();
+        List<Product> products = productService.initializeProducts();
+
         greeting();
 
-        if (!Product.isProductListEmpty()) {
-
-            Product.listProducts();
-            String name = Product.gatherAndCheckName();
-            float price = Payment.gatherAndCheckPrice();
-            int numberOfPayments = Payment.gatherAndCheckNumberOfPayments();
-            long pesel = Customer.gatherAndCheckPesel();
-
-            Payment payment = new Payment(numberOfPayments, price);
-            Product product = new Product(name, BigDecimal.valueOf(price));
-            Customer customer = new Customer(pesel);
-
-            showSummary(customer, product, payment);
-
+        if (!(products.size() == 0)) {
+            listProducts(products);
         } else {
             System.out.println("Przepraszamy, obecnie nie ma żadnych dostępnych produktów");
         }
@@ -30,6 +27,17 @@ public class Main {
         System.out.println();
         System.out.println("Witamy w sklepie z elektroniką!");
         System.out.println();
+    }
+
+    private static void listProducts(List<Product> products) {
+        int OFFSET = 1;
+        DecimalFormat df = new DecimalFormat("###.00");
+        for (int i = 0; i < products.size(); i++) {
+            Product tempProduct = products.get(i);
+            int stockQuantity = tempProduct.getStock().getQuantity();
+            Price price = tempProduct.getPrice();
+            System.out.println(i + OFFSET + ". " + products.get(i).getName() + " - Obecny stan w magazynie: " + stockQuantity + " | Obecna cena: " + df.format(price.getValue()) + " zł");
+        }
     }
 
     private static void showSummary(Customer customer, Product product, Payment payment) {
