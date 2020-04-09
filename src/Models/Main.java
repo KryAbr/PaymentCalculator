@@ -1,26 +1,23 @@
 package Models;
 
+import service.PriceService;
 import service.ProductService;
+import service.StockService;
 
-import java.math.BigDecimal;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Main {
 
+    static ProductService productService = new ProductService();
+    static PriceService priceService = new PriceService();
+    static StockService stockService = new StockService();
+
     public static void main(String[] args) {
-
-        ProductService productService = new ProductService();
-        List<Product> products = productService.initializeProducts();
-
+        productService.initializeProducts();
         greeting();
-
-        if (!(products.size() == 0)) {
-            listProducts(products);
-        } else {
-            System.out.println("Przepraszamy, obecnie nie ma żadnych dostępnych produktów");
-        }
+        menu();
     }
 
     private static void greeting() {
@@ -29,16 +26,29 @@ public class Main {
         System.out.println();
     }
 
-    private static void listProducts(List<Product> products) {
-        int OFFSET = 1;
-        DecimalFormat df = new DecimalFormat("###.00");
-        for (int i = 0; i < products.size(); i++) {
-            Product tempProduct = products.get(i);
-            int stockQuantity = tempProduct.getStock().getQuantity();
-            Price price = tempProduct.getPrice();
-            System.out.println(i + OFFSET + ". " + products.get(i).getName() + " - Obecny stan w magazynie: " + stockQuantity + " | Obecna cena: " + df.format(price.getValue()) + " zł");
+    private static void menu() {
+        Scanner in = new Scanner(System.in);
+
+        System.out.println("1. Zakup (nieaktywne)");
+        System.out.println("2. Import cen");
+        System.out.println("3. Import stocków");
+        System.out.println("4. Zobacz historię cen");
+
+        int choice = in.nextInt();
+
+        switch (choice){
+            case 1:
+                productService.listProducts();
+            case 2:
+                priceService.importPrices();
+            case 3:
+                stockService.importStocks();
+            case 4:
+                priceService.showPriceImportHistory();
         }
     }
+
+
 
     private static void showSummary(Customer customer, Product product, Payment payment) {
         DecimalFormat df = new DecimalFormat("###.00");

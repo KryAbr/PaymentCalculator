@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class StockService {
-    String stockFilepath = "";
+    String stockFilepath = "/home/krystian/Projects/Java/Java training/PaymentCalculatorFiles/stock.csv";
 
     // Rename to readStocks() instead? this method is called both in initializeProdcuts() and will be called when viewing imports
     public List initializeStock() {
@@ -44,5 +44,8 @@ public class StockService {
 
     public boolean isInStock(Product product) {
         return product.getStock().getQuantity() == 0;
+    }
+
+    public void importStocks() {
     }
 }

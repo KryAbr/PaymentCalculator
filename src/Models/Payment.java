@@ -54,6 +54,7 @@ public class Payment {
         return price;
     }
 
+
     private static boolean isValidPrice(float price) {
         return price >= 1500 && price <= 45000;
     }

@@ -5,6 +5,7 @@ import Models.Product;
 import Models.Stock;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +16,7 @@ public class ProductService {
 
     public List<Product> initializeProducts() {
         List<Stock> stockList = stockService.initializeStock();
-        List priceList = priceService.initializePrices();
+        List priceList = priceService.readPricesFromFile();
         List productList = new ArrayList();
 
         for (int i = 0; i < stockList.size(); i++) {
@@ -44,5 +45,22 @@ public class ProductService {
         }
 
         return productPrice == null ? BigDecimal.valueOf(0) : productPrice;
+    }
+
+    public void listProducts() {
+        int OFFSET = 1;
+        List<Product> products = initializeProducts();
+
+        if (!(products.size() == 0)) {
+            DecimalFormat df = new DecimalFormat("###.00");
+            for (int i = 0; i < products.size(); i++) {
+                Product tempProduct = products.get(i);
+                int stockQuantity = tempProduct.getStock().getQuantity();
+                Price price = tempProduct.getPrice();
+                System.out.println(i + OFFSET + ". " + products.get(i).getName() + " - Obecny stan w magazynie: " + stockQuantity + " | Obecna cena: " + df.format(price.getValue()) + " zł");
+            }
+        } else {
+            System.out.println("Przepraszamy, obecnie nie ma żadnych dostępnych produktów");
+        }
     }
 }
