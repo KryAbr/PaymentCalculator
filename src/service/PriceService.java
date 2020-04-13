@@ -2,7 +2,9 @@ package service;
 
 import Models.Price;
 
+import java.io.BufferedWriter;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -13,17 +15,19 @@ import java.util.Scanner;
 
 public class PriceService {
 
-    // Rename to readPrices() instead? this method is called both in initializeProdcuts() and will be called when viewing imports
-    public List readPricesFromFile() {
+    private String PRICES_FILEPATH = "/home/krystian/Projects/Java/Java training/PaymentCalculatorFiles/prices.csv";
 
-        String pricesFilepath = "/home/krystian/Projects/Java/Java training/PaymentCalculatorFiles/prices.csv";
+    public List<Price> readPricesFromFile(String filepath) {
 
-        // Read current price values from CSV file
+        if (filepath.equalsIgnoreCase("defaultPriceList")) {
+            filepath = PRICES_FILEPATH;
+        }
+
         ArrayList priceList = new ArrayList();
         String[] priceLine;
         String priceLineFromCSV;
         try {
-            Scanner scanner = new Scanner(new FileReader(pricesFilepath));
+            Scanner scanner = new Scanner(new FileReader(filepath));
             scanner.nextLine(); // skipping headers
             while (scanner.hasNext()) {
                 priceLineFromCSV = scanner.nextLine();
@@ -45,30 +49,45 @@ public class PriceService {
     }
 
     public void importPrices() {
-        Scanner in = new Scanner(System.in);
-        String importFilepath = "";
-        List<Price> currentPriceList = readPricesFromFile();
-        List<Price>
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(PRICES_FILEPATH, true));
 
+            String separator = ",";
+
+            System.out.print("Podaj sciezke pliku do zaimportowania: ");
+            Scanner in = new Scanner(System.in);
+
+            String importFilepath = in.nextLine();
+            List<Price> newPriceList = readPricesFromFile(importFilepath);
+
+            for (int i = 0; i < newPriceList.size(); i++) {
+                Price currentPriceObj = newPriceList.get(i);
+                String CSVLine = currentPriceObj.getProductName() + separator + currentPriceObj.getValue().toString()
+                        + separator + currentPriceObj.getDate().toString();
+                writer.append(CSVLine);
+            }
+            writer.close();
+        } catch (IOException e) {
+            System.out.println("IOException during price import");
+        }
     }
 
     public void showPriceImportHistory() {
-        List<Price> priceList = readPricesFromFile();
+        List<Price> priceList = readPricesFromFile(PRICES_FILEPATH);
         int OFFSET = 1;
         DecimalFormat df = new DecimalFormat("###.00");
         if (!(priceList == null)) {
             for (int i = 0; i < priceList.size(); i++) {
                 Price tempPriceObj = priceList.get(i);
                 System.out.println();
-                System.out.println(i + OFFSET + ". " +
-                                tempPriceObj.getProductName() +
-                                " Cena: " + df.format(tempPriceObj.getValue()) + " zł" +
-                                " | " + "Data: " + tempPriceObj.getDate());
+                System.out.print(i + OFFSET + ". " +
+                        tempPriceObj.getProductName() +
+                        " Cena: " + df.format(tempPriceObj.getValue()) + " zł" +
+                        " | " + "Data: " + tempPriceObj.getDate());
             }
-        }
-        else {
+            System.out.println();
+        } else {
             System.out.println("Brak pliku z historią zmian cen");
         }
-
     }
 }

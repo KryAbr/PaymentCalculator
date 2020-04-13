@@ -15,8 +15,8 @@ public class ProductService {
     StockService stockService = new StockService();
 
     public List<Product> initializeProducts() {
-        List<Stock> stockList = stockService.initializeStock();
-        List priceList = priceService.readPricesFromFile();
+        List<Stock> stockList = stockService.readStocksFromFile("defaultStocksList");
+        List priceList = priceService.readPricesFromFile("defaultPriceList");
         List productList = new ArrayList();
 
         for (int i = 0; i < stockList.size(); i++) {
