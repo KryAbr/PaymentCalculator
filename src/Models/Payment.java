@@ -12,6 +12,17 @@ public class Payment {
     private BigDecimal monthlyInterestAmount;
     private BigDecimal totalPayment;
     private BigDecimal totalInterestAmount;
+    private final static int MINIMUM_NUMBER_OF_PAYMENTS = 8;
+    private final static int MAXIMUM_NUMBER_OF_PAYMENTS = 48;
+    private final int LOWER_THRESHOLD_FOR_TIER1_INTEREST = 8;
+    private final int UPPER_THRESHOLD_FOR_TIER1_INTEREST = 12;
+    private final int LOWER_THRESHOLD_FOR_TIER2_INTEREST = 13;
+    private final int UPPER_THRESHOLD_FOR_TIER2_INTEREST = 24;
+    private final BigDecimal TIER1_DISCOUNT = BigDecimal.valueOf(0.035);
+    private final BigDecimal TIER2_DISCOUNT = BigDecimal.valueOf(0.055);
+    private final BigDecimal TIER3_DISCOUNT = BigDecimal.valueOf(0.12);
+    private final static int MINIMUM_PRICE = 1500;
+    private final static int MAXIMUM_PRICE = 45000;
 
     public Payment(int numberOfPayments, float price) {
 
@@ -33,12 +44,12 @@ public class Payment {
 
     private BigDecimal calculateInterest(int numberOfPayments) {
 
-        if (numberOfPayments >= 8 && numberOfPayments <= 12) {
-            return BigDecimal.valueOf(0.035);
-        } else if (numberOfPayments >= 13 && numberOfPayments <= 24) {
-            return BigDecimal.valueOf(0.055);
+        if (numberOfPayments >= LOWER_THRESHOLD_FOR_TIER1_INTEREST && numberOfPayments <= UPPER_THRESHOLD_FOR_TIER1_INTEREST) {
+            return TIER1_DISCOUNT;
+        } else if (numberOfPayments >= LOWER_THRESHOLD_FOR_TIER2_INTEREST && numberOfPayments <= UPPER_THRESHOLD_FOR_TIER2_INTEREST) {
+            return TIER2_DISCOUNT;
         } else {
-            return BigDecimal.valueOf(0.12);
+            return TIER3_DISCOUNT;
         }
     }
 
@@ -56,7 +67,7 @@ public class Payment {
 
 
     private static boolean isValidPrice(float price) {
-        return price >= 1500 && price <= 45000;
+        return price >= MINIMUM_PRICE && price <= MAXIMUM_PRICE;
     }
 
     public static int gatherAndCheckNumberOfPayments() {
@@ -76,7 +87,7 @@ public class Payment {
     }
 
     private static boolean isValidNumberOfPayments(int numberOfPayments) {
-        return numberOfPayments >= 8 && numberOfPayments <= 48;
+        return numberOfPayments >= MINIMUM_NUMBER_OF_PAYMENTS && numberOfPayments <= MAXIMUM_NUMBER_OF_PAYMENTS;
     }
 
     public int getNumberOfPayments() {

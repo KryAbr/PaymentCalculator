@@ -15,14 +15,14 @@ public class Customer {
         System.out.print("Podaj pesel: ");
         long pesel = in.nextLong();
 
-        if (!isPeselValid(pesel)) {
+        if (!isPeselBlacklisted(pesel)) {
             System.out.println("Niestety nie posiadasz zdolnosci kredytowej");
             return gatherAndCheckPesel();
         }
         return pesel;
     }
 
-    private static boolean isPeselValid(long pesel) {
+    private static boolean isPeselBlacklisted(long pesel) {
 
         long[] badPesels = new long[]{123456, 654321};
         for (int i = 0; i < badPesels.length; i++) {

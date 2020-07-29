@@ -22,9 +22,13 @@ public class StockService {
             filepath = STOCKS_FILEPATH;
         }
 
-        ArrayList stockList = new ArrayList();
+        List stockList = new ArrayList();
         String[] stockInfo;
         String stockLineFromCSV;
+        int nameColumnNumber = 0;
+        int quantityColumnNumber = 1;
+        int dateColumnNumber = 2;
+
         try {
             Scanner scanner = new Scanner(new FileReader(filepath));
             scanner.nextLine(); // skipping headers
@@ -32,9 +36,9 @@ public class StockService {
                 stockLineFromCSV = scanner.nextLine();
                 stockInfo = stockLineFromCSV.split(",");
 
-                String name = stockInfo[0].trim();
-                int quantity = Integer.parseInt(stockInfo[1].trim());
-                LocalDate date = LocalDate.parse((stockInfo[2].trim()));
+                String name = stockInfo[nameColumnNumber].trim();
+                int quantity = Integer.parseInt(stockInfo[quantityColumnNumber].trim());
+                LocalDate date = LocalDate.parse((stockInfo[dateColumnNumber].trim()));
 
                 Stock stockObject = new Stock(name, quantity, date);
                 stockList.add(stockObject);

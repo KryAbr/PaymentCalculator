@@ -6,23 +6,24 @@ import Models.Stock;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class ProductService {
 
     PriceService priceService = new PriceService();
     StockService stockService = new StockService();
 
-    public List<Product> initializeProducts() {
+    public Set<Product> initializeProducts() {
         List<Stock> stockList = stockService.readStocksFromFile("defaultStocksList");
         List priceList = priceService.readPricesFromFile("defaultPriceList");
-        List productList = new ArrayList();
+        Set productList = new HashSet();
 
         for (int i = 0; i < stockList.size(); i++) {
-            Stock tempObject = stockList.get(i);
-            String productName = tempObject.getProductName();
-            int stock = tempObject.getQuantity();
+            Stock currentStock = stockList.get(i);
+            String productName = currentStock.getProductName();
+            int stock = currentStock.getQuantity();
             BigDecimal price = findLastImportedProductPrice(productName, priceList);
             Product product = new Product(productName, stock, price);
             productList.add(product);
@@ -48,16 +49,17 @@ public class ProductService {
     }
 
     public void listProducts() {
-        int OFFSET = 1;
-        List<Product> products = initializeProducts();
+        final int OFFSET = 1;
+        int numberOnList = 0;
+        Set <Product> products = initializeProducts();
 
         if (!(products.size() == 0)) {
             DecimalFormat df = new DecimalFormat("###.00");
-            for (int i = 0; i < products.size(); i++) {
-                Product tempProduct = products.get(i);
+            for (Product product : products) {
+                Product tempProduct = product;
                 int stockQuantity = tempProduct.getStock().getQuantity();
                 Price price = tempProduct.getPrice();
-                System.out.println(i + OFFSET + ". " + products.get(i).getName() + " - Obecny stan w magazynie: " + stockQuantity + " | Obecna cena: " + df.format(price.getValue()) + " zł");
+                System.out.println(numberOnList + 1 + OFFSET + ". " + product.getName() + " - Obecny stan w magazynie: " + stockQuantity + " | Obecna cena: " + df.format(price.getValue()) + " zł");
             }
         } else {
             System.out.println("Przepraszamy, obecnie nie ma żadnych dostępnych produktów");
