@@ -1,6 +1,6 @@
-package service;
+package main.service;
 
-import Models.Price;
+import main.model.Price;
 
 import java.io.BufferedWriter;
 import java.io.FileReader;

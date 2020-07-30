@@ -1,23 +1,18 @@
-package Models;
+package main.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public class Stock {
+public class Price {
 
     private String productName;
-    private int quantity;
+    private BigDecimal value;
     private LocalDate date;
 
-    public Stock(String productName, int quantity, LocalDate date) {
+    public Price(String productName, BigDecimal value, LocalDate date) {
         this.productName = productName;
-        this.quantity = quantity;
+        this.value = value;
         this.date = date;
-    }
-
-    public Stock(String productName, int quantity) {
-        this.productName = productName;
-        this.quantity = quantity;
-        this.date = LocalDate.now();
     }
 
     public String getProductName() {
@@ -28,12 +23,12 @@ public class Stock {
         this.productName = productName;
     }
 
-    public int getQuantity() {
-        return quantity;
+    public BigDecimal getValue() {
+        return value;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+    public void setValue(BigDecimal value) {
+        this.value = value;
     }
 
     public LocalDate getDate() {

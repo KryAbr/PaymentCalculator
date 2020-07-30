@@ -1,8 +1,8 @@
-package service;
+package main.service;
 
-import Models.Customer;
-import Models.Payment;
-import Models.Product;
+import main.model.Customer;
+import main.model.Payment;
+import main.model.Product;
 
 import java.text.DecimalFormat;
 import java.util.Scanner;

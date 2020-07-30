@@ -1,7 +1,7 @@
-package service;
+package main.service;
 
-import Models.Product;
-import Models.Stock;
+import main.model.Product;
+import main.model.Stock;
 
 import java.io.BufferedWriter;
 import java.io.FileReader;

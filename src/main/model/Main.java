@@ -1,9 +1,9 @@
-package Models;
+package main.model;
 
-import service.DisplayService;
-import service.PriceService;
-import service.ProductService;
-import service.StockService;
+import main.service.DisplayService;
+import main.service.PriceService;
+import main.service.ProductService;
+import main.service.StockService;
 
 public class Main {
 

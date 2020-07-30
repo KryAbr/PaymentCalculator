@@ -1,8 +1,8 @@
-package service;
+package main.service;
 
-import Models.Price;
-import Models.Product;
-import Models.Stock;
+import main.model.Price;
+import main.model.Product;
+import main.model.Stock;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
